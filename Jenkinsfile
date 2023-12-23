@@ -74,12 +74,14 @@ pipeline{
                 sh 'docker run -d -p 3000:3000 mukeshr29/number-game:latest'
             }
         }
-        // stage('kubernetes deployment'){
-        //     steps{
-        //         script{
-
-        //         }
-        //     }
-        // }
+        stage('kubernetes deployment'){
+            steps{
+                script{
+                    withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', serverUrl: '']]){
+                        sh 'kubectl apply -f deployment.yaml -f service.yml'
+                    }
+                }
+            }
+        }
     }
 }
