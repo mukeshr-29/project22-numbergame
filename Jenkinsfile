@@ -74,12 +74,12 @@ pipeline{
                 sh 'docker run -d -p 3000:3000 mukeshr29/number-game:latest'
             }
         }
-        stage('kubernetes deployment'){
-            steps{
-                script{
+        // stage('kubernetes deployment'){
+        //     steps{
+        //         script{
 
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
     }
 }
