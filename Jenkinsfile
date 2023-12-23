@@ -71,7 +71,14 @@ pipeline{
         }
         stage('deploy to container'){
             steps{
-                sh 'docker run -d -p 3000:3000 mukeshr29/number-game:latest --name num-game'
+                sh 'docker run -d -p 3000:3000 mukeshr29/number-game:latest'
+            }
+        }
+        stage('kubernetes deployment'){
+            steps{
+                script{
+
+                }
             }
         }
     }
