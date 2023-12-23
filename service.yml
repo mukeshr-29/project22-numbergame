@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: number-game-sevice
+spec:
+  type: LoadBalancer
+  selector:
+    app: number-game
+  ports:
+  - port: 80
+    targetPort: 3000
