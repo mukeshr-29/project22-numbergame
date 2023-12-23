@@ -36,5 +36,43 @@ pipeline{
                } 
             }
         }
+        stage('install dependencies'){
+            steps{
+                sh 'npm install'
+            }
+        }
+        stage('dependency check'){
+            steps{
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'dp-check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        stage('trivy file scan'){
+            steps{
+                sh 'trivy fs . > trivyfs.txt'
+            }
+        }
+        stage{
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker'){
+                        sh '''
+                            docker build -t mukeshr29/number-game:latest .
+                            docker push mukeshr29/number-game:latest
+                        '''
+                    }
+                }
+            }
+        }
+        stage('trivy img scan'){
+            steps{
+                sh 'trivy image mukeshr29/number-game:latest > trivyimg.txt'
+            }
+        }
+        stage('deploy to container'){
+            steps{
+                sh 'docker run -d -p 3000:3000 mukeshr29/number-game:latest --name num-game'
+            }
+        }
     }
 }
